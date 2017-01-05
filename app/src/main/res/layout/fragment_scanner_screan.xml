@@ -1,0 +1,20 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.pawlikowski.sebastian.qrscanner.View.ScannerScreanFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal|top">
+
+        <SurfaceView
+            android:layout_width="303dp"
+            android:layout_height="378dp"
+            android:id="@+id/surfaceView"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+</FrameLayout>
