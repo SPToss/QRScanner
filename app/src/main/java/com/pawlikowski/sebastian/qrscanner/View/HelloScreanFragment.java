@@ -1,6 +1,11 @@
 package com.pawlikowski.sebastian.qrscanner.View;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Application;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -70,11 +75,30 @@ public class HelloScreanFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        BitmapFactory.Options di = new BitmapFactory.Options();
-        di.inScaled = false;
-        Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
-        ImageService service = ImageService.Initate(myBitmap);
-        boolean test = service.SearchForFinder();
+        Context c = getActivity().getApplicationContext();
+        boolean isCameraInstalled = c.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        if(!isCameraInstalled){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+            alertDialogBuilder.setMessage("Your device has no camera. Application will close now");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton(
+                    "OK",
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            System.exit(0);
+                        }
+                    }
+            );
+            alertDialogBuilder.show();
+        }
+      //  BitmapFactory.Options di = new BitmapFactory.Options();
+        //di.inScaled = false;
+        //Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
+        //ImageService service = ImageService.Initate(myBitmap);
+        //boolean test = service.SearchForFinder();
 
 
 
