@@ -27,11 +27,6 @@ public class MainActivity extends AppCompatActivity
         InfoScreenFragment.OnFragmentInteractionListener,HistoryScreenFragment.OnFragmentInteractionListener
 {
 
-    private static SurfaceView preview=null;
-    private static SurfaceHolder previewHolder=null;
-    private android.hardware.Camera _camera;
-    private CameraView _cameraView;
-
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -56,27 +51,6 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
-        //mNavigationDrawerFragment.setUp(
-          //      R.id.navigation_drawer,
-            //    (DrawerLayout) findViewById(R.id.drawer_layout));
-
-       // preview=(SurfaceView)findViewById(R.id.preview);
-       // previewHolder=preview.getHolder();
-        //previewHolder.addCallback(surfaceCallback);
-        //previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        try
-        {
-            _camera = android.hardware.Camera.open();
-        } catch (Exception e){
-            //shit happen
-        }
-
-        if(_camera != null){
-            _cameraView = new CameraView(this,_camera);
-            FrameLayout frame = (FrameLayout)findViewById(R.id.container);
-            frame.addView(_cameraView);
-        }
     }
 
     @Override
