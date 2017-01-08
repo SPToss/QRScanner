@@ -1,17 +1,26 @@
 package com.pawlikowski.sebastian.qrscanner.View;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.pawlikowski.sebastian.qrscanner.R;
+
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,19 +30,20 @@ import com.pawlikowski.sebastian.qrscanner.R;
  * Use the {@link ScannerScreanFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ScannerScreanFragment extends Fragment
+public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Callback
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    Camera camera1 = null;
+    SurfaceView surfaceView;
+    SurfaceHolder surfaceHolder;
+    public static boolean previewing = false;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private Camera _camera;
-    private CameraView _cameraView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -65,7 +75,7 @@ public class ScannerScreanFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+                if (getArguments() != null)
         {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -77,7 +87,48 @@ public class ScannerScreanFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scanner_screan, container, false);
+        View view = inflater.inflate(R.layout.fragment_scanner_screan, container, false);
+        surfaceView = (SurfaceView) view.findViewById(R.id.surfaceView);
+
+        //surfaceView = new SurfaceView(getActivity());
+        surfaceHolder = surfaceView.getHolder();
+        surfaceHolder.addCallback(this);
+        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        //surfaceView.setBackgroundResource(R.drawable.your_background_image);
+
+        if(!previewing){
+
+            camera1 = Camera.open();
+            if (camera1 != null){
+                try {
+                    camera1.setDisplayOrientation(90);
+                    camera1.setPreviewDisplay(surfaceHolder);
+                    camera1.startPreview();
+                    previewing = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        final Button captureButton = (Button)view.findViewById(R.id.scanButton);
+
+        captureButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(camera1 != null){
+                    try{
+                        camera1.takePicture(myShutterCallback,myPictureCallback_RAW,myPictureCallback_JPG);
+                    }
+                    catch (Exception e){
+
+                    }
+                }
+            }
+        });
+        return  view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -125,5 +176,63 @@ public class ScannerScreanFragment extends Fragment
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
+        // TODO Auto-generated method stub
+        if(previewing){
+            camera1.stopPreview();
+            previewing = false;
+        }
+
+        if (camera1 != null){
+            try {
+                camera1.setPreviewDisplay(surfaceHolder);
+                camera1.startPreview();
+                previewing = true;
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void surfaceCreated(SurfaceHolder holder) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        // TODO Auto-generated method stub
+
+        camera1.stopPreview();
+        camera1.release();
+        camera1 = null;
+        previewing = false;
+
+    }
+
+    Camera.ShutterCallback myShutterCallback = new Camera.ShutterCallback(){
+
+        public void onShutter() {
+            // TODO Auto-generated method stub
+        }};
+
+    Camera.PictureCallback myPictureCallback_RAW = new Camera.PictureCallback(){
+
+        public void onPictureTaken(byte[] arg0, Camera arg1) {
+            // TODO Auto-generated method stub
+        }};
+
+    Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback(){
+
+        public void onPictureTaken(byte[] arg0, Camera arg1) {
+            // TODO Auto-generated method stub
+            Bitmap bitmapPicture = BitmapFactory.decodeByteArray(arg0, 0, arg0.length);
+
+            Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
+
+        }};
 
 }
