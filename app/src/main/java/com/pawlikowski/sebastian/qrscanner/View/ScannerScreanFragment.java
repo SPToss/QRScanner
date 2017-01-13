@@ -22,6 +22,8 @@ import com.pawlikowski.sebastian.qrscanner.R;
 
 import java.io.IOException;
 
+import Domain.ImageService;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -232,6 +234,14 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
             Bitmap bitmapPicture = BitmapFactory.decodeByteArray(arg0, 0, arg0.length);
 
             Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
+
+
+              BitmapFactory.Options di = new BitmapFactory.Options();
+            di.inScaled = false;
+            Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
+            ImageService service = ImageService.Initate(correctBmp);
+            boolean test = service.SearchForFinder();
+
 
         }};
 

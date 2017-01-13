@@ -24,7 +24,7 @@ import junit.framework.Test;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,HelloScreanFragment.OnFragmentInteractionListener,ScannerScreanFragment.OnFragmentInteractionListener,
-        InfoScreenFragment.OnFragmentInteractionListener,HistoryScreenFragment.OnFragmentInteractionListener
+        InfoScreenFragment.OnFragmentInteractionListener
 {
 
     /**
@@ -81,12 +81,6 @@ public class MainActivity extends AppCompatActivity
                 this.getFragmentManager().beginTransaction().replace(R.id.container,scannerScreenFragment).addToBackStack(null).commit();
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
-
-                android.app.Fragment histroyScreenFragment = new HistoryScreenFragment();
-                this.getFragmentManager().beginTransaction().replace(R.id.container,histroyScreenFragment).addToBackStack(null).commit();
-                break;
-            case 4:
                 mTitle = getString(R.string.title_section4);
 
                 android.app.Fragment infoScreenFragment = new InfoScreenFragment();

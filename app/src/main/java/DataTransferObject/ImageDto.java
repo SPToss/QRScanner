@@ -1,7 +1,11 @@
 package DataTransferObject;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 
 /**
  * Created by Sebastian on 26.01.2016.
@@ -54,6 +58,7 @@ public class ImageDto
 
     private void setBinaryTable()
     {
+
         int height = GetHeight();
         int width = GetWidth();
         BinaryTable = new int[height][width];
