@@ -239,7 +239,7 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
               BitmapFactory.Options di = new BitmapFactory.Options();
             di.inScaled = false;
             Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
-            ImageService service = ImageService.Initate(correctBmp);
+            ImageService service = ImageService.Initate(myBitmap);
             boolean test = service.SearchForFinder();
 
 
