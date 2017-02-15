@@ -1,7 +1,13 @@
 package Domain;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
+import java.io.IOException;
+
+import javax.crypto.Cipher;
+
+import DataTransferObject.Enums.CodeVersion;
 import DataTransferObject.ImageDto;
 import DataTransferObject.QrCodeImageDto;
 import Domain.Contracts.IImageService;
@@ -15,19 +21,21 @@ public final class ImageService implements IImageService
     private static ImageService _imageService;
     private static ImageDto _imageDto;
     private QrCodeImageDto _finalImage;
+    private static Network _network;
     private ImageService()
     {
     }
 
 
     // Declaration of singleton
-    public static ImageService Initate(Bitmap bitmap)
+    public static ImageService Initate(Bitmap bitmap, Context context)
     {
         if (_imageService == null){
-            _imageService = new ImageService();
-            _imageDto = new ImageDto();
-            _imageDto.SetBitmap(bitmap);
+            _imageService = new ImageService();;
+            _network = new Network(context);
         }
+        _imageDto = new ImageDto();
+        _imageDto.SetBitmap(bitmap);
         return _imageService;
     }
 
@@ -41,41 +49,53 @@ public final class ImageService implements IImageService
         else return true;
     }
 
-    public ImageDto TurnIntoGrayScale(ImageDto colorPhoto)
+    public String Decode() throws Exception
     {
-        ImageDto newImageDto = colorPhoto;
-        int width = colorPhoto.GetWidth();
-        int height = colorPhoto.GetHeight();
-
-        Bitmap grayScaleBitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
-
-        newImageDto.SetBitmap(grayScaleBitmap);
-        return newImageDto;
-    }
-
-    public char Decode(){
-        String type = Analise();
+        CodeVersion type = Analise();
         IQrService service;
         switch (type){
-            case "first":
+            case First:
             {
                 service = new FirstVersion(_finalImage);
+                break;
             }
-            case "second":
+            case Second:
             {
                 service = new SecondVersion();
+                break;
             }
-            case "third":
+            case Third:
             {
                 service = new ThirdVersion();
+                break;
             }
+            case NotSupported:
+             default:
+                 throw new Exception("No Supported QR Code Found ");
 
-            char test = service.Decode();
+            //char test = service.Decode();
         }
-        return '0';
+        return type.toString();
     }
 
-    private String Analise(){
-        return "first";
+    private CodeVersion Analise()
+    {
+        if(_finalImage == null){
+            return CodeVersion.NotSupported;
+        }
+        double ratio =  (double)_finalImage.GetImage().GetHeight() / (double)_finalImage.GetMarker();
+        if(ratio > 20 && ratio < 22){
+            return  CodeVersion.First;
+        }
+
+        if (ratio > 24 && ratio < 26){
+            return CodeVersion.Second;
+        }
+
+        if(ratio > 28 && ratio < 30){
+            return CodeVersion.Third;
+        }
+
+        return CodeVersion.NotSupported;
     }
 }

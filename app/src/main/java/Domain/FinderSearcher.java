@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ServiceConfigurationError;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import DataTransferObject.Enums.ImageStatus;
 import DataTransferObject.FinderSearcherResultDto;
@@ -28,7 +30,6 @@ public class FinderSearcher
     public QrCodeImageDto FinderBase(ImageDto image)
     {
         ImageDto processImage = new ImageDto();
-
         // process 1 part
         processImage.SetBitmap(Bitmap.createBitmap(image.GetBitmap(),0,0,image.GetWidth() / 2 , image.GetHeight() / 2));
         FinderSearcherResultDto firstZone = SearchForFinder(processImage);
@@ -181,6 +182,7 @@ public class FinderSearcher
 
     private FinderSearcherResultDto SearchForFinder(ImageDto shard)
     {
+        shard.setBinaryTable();
         int[][] bitTable = shard.getBinaryTable();
         ArrayList<PointDto> startList = new ArrayList<>();
         ArrayList<Integer> partList = new ArrayList<>();
@@ -376,7 +378,7 @@ public class FinderSearcher
 
     private int CalculateMarker(int firstMarker,int secondMarker,int thirdMarker,int fourthMarker)
     {
-        return (firstMarker + secondMarker + thirdMarker + firstMarker) / 4;
+        return (firstMarker + secondMarker + thirdMarker + fourthMarker) / 4;
     }
 
     private Bitmap RotateBitmap(Bitmap bitmap,float degree)

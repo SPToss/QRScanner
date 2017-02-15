@@ -7,5 +7,4 @@ import DataTransferObject.ImageDto;
  */
 public interface IImageService{
 
-    ImageDto TurnIntoGrayScale(ImageDto colorPhoto);
 }

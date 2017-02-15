@@ -1,6 +1,7 @@
 package com.pawlikowski.sebastian.qrscanner.View;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -235,12 +236,22 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
 
             Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
 
-
               BitmapFactory.Options di = new BitmapFactory.Options();
             di.inScaled = false;
             Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
-            ImageService service = ImageService.Initate(myBitmap);
-            boolean test = service.SearchForFinder();
+            Context c = getActivity().getApplicationContext();
+            ImageService service = ImageService.Initate(myBitmap, c);
+            boolean isQrCode = service.SearchForFinder();
+            String  test = "";
+            if(isQrCode){
+                try
+                {
+                    test = service.Decode();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
 
 
         }};

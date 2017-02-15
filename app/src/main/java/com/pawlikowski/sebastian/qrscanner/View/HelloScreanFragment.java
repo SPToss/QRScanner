@@ -2,29 +2,20 @@ package com.pawlikowski.sebastian.qrscanner.View;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.pawlikowski.sebastian.qrscanner.R;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import Domain.ImageService;
+import Domain.PropertyReader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,6 +67,7 @@ public class HelloScreanFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         Context c = getActivity().getApplicationContext();
+
         boolean isCameraInstalled = c.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
         if(!isCameraInstalled){
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -94,12 +86,6 @@ public class HelloScreanFragment extends Fragment
             );
             alertDialogBuilder.show();
         }
-      //  BitmapFactory.Options di = new BitmapFactory.Options();
-        //di.inScaled = false;
-        //Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
-        //ImageService service = ImageService.Initate(myBitmap);
-        //boolean test = service.SearchForFinder();
-
 
 
         if (getArguments() != null)

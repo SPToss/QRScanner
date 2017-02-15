@@ -1,11 +1,19 @@
 package DataTransferObject;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Sebastian on 26.01.2016.
@@ -26,7 +34,7 @@ public class ImageDto
             _height = _bitmap.getHeight();
             _width = _bitmap.getWidth();
         }
-        setBinaryTable();
+      //  setBinaryTable();
 
     }
 
@@ -56,7 +64,7 @@ public class ImageDto
         return BinaryTable;
     }
 
-    private void setBinaryTable()
+    public void setBinaryTable()
     {
 
         int height = GetHeight();

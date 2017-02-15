@@ -20,4 +20,5 @@
         android:text="Autor: Sebastian Pawlikowski v: alpha 0.0.1"
         android:id="@+id/textView2"
         android:layout_gravity="center_horizontal|bottom"/>
+
 </FrameLayout>
