@@ -16,39 +16,39 @@ import Domain.Mask.ThirdMask;
  */
 public class VersionBase
 {
-    public IMask RetriveMask(MaskStatus status)
+    public IMask RetriveMask(String status)
     {
         switch (status)
         {
-            case First:
+            case "111":
             {
                 return new FirstMask();
             }
-            case Second:
+            case "110":
             {
                 return new SecondMask();
             }
-            case Third:
+            case "101":
             {
                 return new ThirdMask();
             }
-            case Fourth:
+            case "100":
             {
                 return new FourthMask();
             }
-            case Fifth:
+            case "011":
             {
                 return new FifthMask();
             }
-            case Sixth:
+            case "010":
             {
                 return new SixthMask();
             }
-            case Seventh:
+            case "001":
             {
                 return new SeventhMask();
             }
-            case Eight:
+            case "000":
             {
                 return new EigthMask();
             }

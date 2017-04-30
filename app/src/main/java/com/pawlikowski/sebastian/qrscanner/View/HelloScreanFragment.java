@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -88,6 +90,10 @@ public class HelloScreanFragment extends Fragment
         }
 
 
+
+
+
+
         if (getArguments() != null)
         {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -101,7 +107,13 @@ public class HelloScreanFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hello_screan, container, false);
+        View v =  inflater.inflate(R.layout.fragment_hello_screan, container, false);
+        ImageView image = (ImageView) v.findViewById(R.id.imageView);
+        BitmapFactory.Options di = new BitmapFactory.Options();
+        di.inScaled = false;
+        final Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
+        image.setImageBitmap(myBitmap);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

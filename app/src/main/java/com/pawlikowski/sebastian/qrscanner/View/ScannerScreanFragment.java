@@ -1,7 +1,9 @@
 package com.pawlikowski.sebastian.qrscanner.View;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -113,9 +115,7 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
                 }
             }
         }
-
         final Button captureButton = (Button)view.findViewById(R.id.scanButton);
-
         captureButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -183,7 +183,6 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
-        // TODO Auto-generated method stub
         if(previewing){
             camera1.stopPreview();
             previewing = false;
@@ -195,19 +194,16 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
                 camera1.startPreview();
                 previewing = true;
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
 
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
 
         camera1.stopPreview();
         camera1.release();
@@ -219,41 +215,81 @@ public class ScannerScreanFragment extends Fragment implements SurfaceHolder.Cal
     Camera.ShutterCallback myShutterCallback = new Camera.ShutterCallback(){
 
         public void onShutter() {
-            // TODO Auto-generated method stub
         }};
 
     Camera.PictureCallback myPictureCallback_RAW = new Camera.PictureCallback(){
 
         public void onPictureTaken(byte[] arg0, Camera arg1) {
-            // TODO Auto-generated method stub
         }};
 
     Camera.PictureCallback myPictureCallback_JPG = new Camera.PictureCallback(){
 
         public void onPictureTaken(byte[] arg0, Camera arg1) {
-            // TODO Auto-generated method stub
             Bitmap bitmapPicture = BitmapFactory.decodeByteArray(arg0, 0, arg0.length);
 
             Bitmap correctBmp = Bitmap.createBitmap(bitmapPicture, 0, 0, bitmapPicture.getWidth(), bitmapPicture.getHeight(), null, true);
 
-              BitmapFactory.Options di = new BitmapFactory.Options();
+            BitmapFactory.Options di = new BitmapFactory.Options();
             di.inScaled = false;
-            Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.q1r, di);
-            Context c = getActivity().getApplicationContext();
-            ImageService service = ImageService.Initate(myBitmap, c);
-            boolean isQrCode = service.SearchForFinder();
-            String  test = "";
-            if(isQrCode){
-                try
-                {
-                    test = service.Decode();
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
+            final Bitmap myBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.qr3, di);
+            final Context c = getActivity().getApplicationContext();
+            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
+            alertDialogBuilder.setMessage("Application will scan ");
+            alertDialogBuilder.setCancelable(false);
+            alertDialogBuilder.setPositiveButton(
+                    "OK",
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            String message = "";
+                            ImageService service = ImageService.Initate(myBitmap, c);
+                            boolean isQrCode = service.SearchForFinder();
+                            if (isQrCode)
+                            {
+                                try
+                                {
+                                    message = service.Decode();
+                                } catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                            final AlertDialog.Builder alertDialogBuilder1 = new AlertDialog.Builder(getActivity());
 
+                            alertDialogBuilder1.setMessage("Scan result : \n" + message);
+                            alertDialogBuilder1.setCancelable(false);
+                            alertDialogBuilder1.setPositiveButton(
+                                    "OK",
+                                    new DialogInterface.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
+                                            alertDialogBuilder.create().dismiss();
+                                            alertDialogBuilder1.create().dismiss();
+                                        }
+                                    }
+                            );
+                            alertDialogBuilder1.show();
+                        }
+
+                    }
+            );
+            alertDialogBuilder.setNegativeButton(
+                    "Cancel",
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            alertDialogBuilder.create().dismiss();
+                        }
+                    }
+            );
+            alertDialogBuilder.show();
         }};
 
 }

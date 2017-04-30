@@ -60,7 +60,7 @@ public class Network
                 iterator = i;
             }
         }
-        return Character.toString((char) iterator);
+        return Character.toString((char) (255 - iterator));
     }
 
     private ArrayList<Double> ConvertStringToArrayList(String key){

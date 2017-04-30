@@ -1,5 +1,7 @@
 package Domain;
 
+import java.util.ArrayList;
+
 import Domain.Contracts.IQrService;
 
 /**
@@ -8,8 +10,8 @@ import Domain.Contracts.IQrService;
 public class SecondVersion implements IQrService
 {
     @Override
-    public char Decode()
+    public ArrayList<Double[]> Decode()
     {
-        return 0;
+        return null;
     }
 }

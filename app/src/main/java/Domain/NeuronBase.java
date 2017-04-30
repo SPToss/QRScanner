@@ -23,6 +23,4 @@ public abstract class NeuronBase
     protected double ActivationFunction(double value){
         return 1 / (1 + Math.pow(Math.E,-value));
     }
-
-
 }

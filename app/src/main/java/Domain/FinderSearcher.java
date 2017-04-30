@@ -170,12 +170,13 @@ public class FinderSearcher
         Bitmap bmp = image.GetBitmap();
         int w = bmp.getWidth();
         int h = bmp.getHeight();
-        Bitmap test = Bitmap.createBitmap(bmp,firstPoints.get(0).getX(),
-                firstPoints.get(0).getY(),((w/2 - firstPoints.get(0).getX()) + (w /2 - secondPoints.get(1).getX())),((h / 2 - firstPoints.get(0).getY()) + (h / 2 - thirdPoints.get(2).getY())));
-        qrImage.SetBitmap(test);
-
         int marker = CalculateMarker(finderSearcherResultDtos[0].GetSectionSize(), finderSearcherResultDtos[1].GetSectionSize(),
                 finderSearcherResultDtos[2].GetSectionSize(), finderSearcherResultDtos[3].GetSectionSize());
+        Bitmap test = Bitmap.createBitmap(bmp,firstPoints.get(0).getX(),
+                firstPoints.get(0).getY(),((w /2 + secondPoints.get(1).getX() + 1) - (firstPoints.get(0).getX())),((h / 2 + thirdPoints.get(2).getY() + 1) - (firstPoints.get(0).getY())));
+        qrImage.SetBitmap(test);
+
+
 
         return new QrCodeImageDto(qrImage,marker);
     }
@@ -226,6 +227,7 @@ public class FinderSearcher
                             firstPartLength = 0;
                             firstPartStart = new PointDto();
                             secondPartLength = 0;
+                            firstPartLength++;
 
                         }
                     }
@@ -332,12 +334,14 @@ public class FinderSearcher
            }
         }
         int maxLeng = 0;
+        boolean isStart = false;
         for (int i= 0;i <= partList.size() - 1;i++)
         {
             if(partList.get(i) == max){
                 maxLeng ++;
-                if(start == 0){
+                if(start == 0 && !isStart){
                     start = i;
+                    isStart = true;
                 }
                 sum += partList.get(i);
             }
@@ -378,7 +382,28 @@ public class FinderSearcher
 
     private int CalculateMarker(int firstMarker,int secondMarker,int thirdMarker,int fourthMarker)
     {
-        return (firstMarker + secondMarker + thirdMarker + fourthMarker) / 4;
+        double result = 0;
+        double count = 0;
+        if(firstMarker != 0){
+            result += firstMarker;
+            count++;
+        }
+        if(secondMarker != 0){
+            result += secondMarker;
+            count++;
+        }
+        if(thirdMarker != 0){
+            result += thirdMarker;
+            count++;
+        }
+        if(fourthMarker != 0){
+            result += fourthMarker;
+            count++;
+        }
+
+        double r =  result / count;
+
+       return (int) Math.round(r);
     }
 
     private Bitmap RotateBitmap(Bitmap bitmap,float degree)

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 
@@ -72,10 +74,31 @@ public final class ImageService implements IImageService
             case NotSupported:
              default:
                  throw new Exception("No Supported QR Code Found ");
-
-            //char test = service.Decode();
         }
-        return type.toString();
+        ArrayList<Double[]> result = service.Decode();
+        String message = "Sieć neuronowa : ";
+        for(Double[] element : result){
+            message += _network.GetCharFormSegment(new ArrayList<>(Arrays.asList(element)));
+           }
+        message +=  "\n Normalna Metoda : ";
+        for(Double[] element : result){
+            String lenh = "";
+            for (Double e:element)
+            {
+                if (e > 0.5)
+                {
+                    lenh += "1";
+                }
+                else {
+                    lenh += "0";
+                }
+            }
+            int code = Integer.parseInt(lenh, 2);
+
+            message += Character.toString((char)  ( + code));
+        }
+
+        return message;
     }
 
     private CodeVersion Analise()

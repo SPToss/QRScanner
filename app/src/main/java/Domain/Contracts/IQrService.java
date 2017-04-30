@@ -1,5 +1,7 @@
 package Domain.Contracts;
 
+import java.util.ArrayList;
+
 import DataTransferObject.QrCodeImageDto;
 
 /**
@@ -7,5 +9,5 @@ import DataTransferObject.QrCodeImageDto;
  */
 public interface IQrService
 {
-    char Decode();
+    ArrayList<Double[]> Decode();
 }
